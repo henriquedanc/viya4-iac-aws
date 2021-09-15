@@ -277,6 +277,7 @@ module "eks" {
     bootstrap_extra_args                 = local.is_private ? "--apiserver-endpoint ${data.aws_eks_cluster.cluster.endpoint} --b64-cluster-ca" + base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data) : ""
     iam_instance_profile_name            = var.workers_iam_role_name
     key_name                             = var.cluster_node_ssh_access ? aws_key_pair.eks[0].key_name : ""
+    subnets                              = [ module.vpc.private_subnets[0] ]
   }
 
   # Added to support EBS CSI driver
